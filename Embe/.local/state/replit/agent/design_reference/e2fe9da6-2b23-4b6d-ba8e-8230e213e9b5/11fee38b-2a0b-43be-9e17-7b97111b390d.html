@@ -1,0 +1,286 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fuck</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+    tailwind.config = {
+       theme: {
+         extend: {
+          borderRadius: {
+          lg: "var(--radius)",
+          md: "calc(var(--radius) - 2px)",
+          sm: "calc(var(--radius) - 4px)",
+          },
+          colors: {
+          background: "var(--background)",
+          foreground: "var(--foreground)",
+          card: {
+             DEFAULT: "var(--card)",
+             foreground: "var(--card-foreground)",
+          },
+          popover: {
+             DEFAULT: "var(--popover)",
+             foreground: "var(--popover-foreground)",
+          },
+          primary: {
+             DEFAULT: "var(--primary)",
+             foreground: "var(--primary-foreground)",
+          },
+          secondary: {
+             DEFAULT: "var(--secondary)",
+             foreground: "var(--secondary-foreground)",
+          },
+          muted: {
+             DEFAULT: "var(--muted)",
+             foreground: "var(--muted-foreground)",
+          },
+          accent: {
+             DEFAULT: "var(--accent)",
+             foreground: "var(--accent-foreground)",
+          },
+          destructive: {
+             DEFAULT: "var(--destructive)",
+             foreground: "var(--destructive-foreground)",
+          },
+          border: "var(--border)",
+          input: "var(--input)",
+          ring: "var(--ring)",
+          chart: {
+             "1": "var(--chart-1)",
+             "2": "var(--chart-2)",
+             "3": "var(--chart-3)",
+             "4": "var(--chart-4)",
+             "5": "var(--chart-5)",
+          }
+          },
+          fontFamily: {
+          sans: ["var(--font-sans)"],
+          serif: ["var(--font-serif)"],
+          mono: ["var(--font-mono)"],
+       }
+  },
+}
+    };
+    </script>
+    <style>
+      :root {
+        --background: hsl(0 0% 100%);
+        --foreground: hsl(222.2 84% 4.9%);
+        --card: hsl(0 0% 100%);
+        --card-foreground: hsl(222.2 84% 4.9%);
+        --popover: hsl(0 0% 100%);
+        --popover-foreground: hsl(222.2 84% 4.9%);
+        --primary: hsl(222.2 47.4% 11.2%);
+        --primary-foreground: hsl(210 40% 98%);
+        --secondary: hsl(210 40% 96%);
+        --secondary-foreground: hsl(222.2 84% 4.9%);
+        --muted: hsl(210 40% 96%);
+        --muted-foreground: hsl(215.4 16.3% 46.9%);
+        --accent: hsl(210 40% 96%);
+        --accent-foreground: hsl(222.2 84% 4.9%);
+        --destructive: hsl(0 84.2% 60.2%);
+        --destructive-foreground: hsl(210 40% 98%);
+        --border: hsl(214.3 31.8% 91.4%);
+        --input: hsl(214.3 31.8% 91.4%);
+        --ring: hsl(222.2 84% 4.9%);
+        --radius: 0.5rem;
+        --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+        --font-serif: 'Georgia', serif;
+        --font-mono: 'JetBrains Mono', monospace;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --background: hsl(222.2 84% 4.9%);
+          --foreground: hsl(210 40% 98%);
+          --card: hsl(222.2 84% 4.9%);
+          --card-foreground: hsl(210 40% 98%);
+          --popover: hsl(222.2 84% 4.9%);
+          --popover-foreground: hsl(210 40% 98%);
+          --primary: hsl(210 40% 98%);
+          --primary-foreground: hsl(222.2 47.4% 11.2%);
+          --secondary: hsl(217.2 32.6% 17.5%);
+          --secondary-foreground: hsl(210 40% 98%);
+          --muted: hsl(217.2 32.6% 17.5%);
+          --muted-foreground: hsl(215 20.2% 65.1%);
+          --accent: hsl(217.2 32.6% 17.5%);
+          --accent-foreground: hsl(210 40% 98%);
+          --destructive: hsl(0 62.8% 30.6%);
+          --destructive-foreground: hsl(210 40% 98%);
+          --border: hsl(217.2 32.6% 17.5%);
+          --input: hsl(217.2 32.6% 17.5%);
+          --ring: hsl(212.7 26.8% 83.9%);
+        }
+      }
+
+      body {
+        background-color: hsl(var(--background));
+        color: hsl(var(--foreground));
+        font-family: var(--font-sans);
+      }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body class="min-h-screen bg-background text-foreground antialiased">
+    <!-- @COMPONENT: Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex-shrink-0">
+                    <span class="text-xl font-bold text-foreground">F</span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#" class="text-muted-foreground hover:text-foreground px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200">Home</a>
+                        <a href="#" class="text-muted-foreground hover:text-foreground px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200">About</a>
+                        <a href="#" class="text-muted-foreground hover:text-foreground px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200">Contact</a>
+                    </div>
+                </div>
+                <div class="md:hidden">
+                    <button type="button" class="text-muted-foreground hover:text-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background p-2 rounded-md" data-implementation="Mobile menu toggle">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- @END_COMPONENT: Navigation -->
+
+    <!-- @COMPONENT: MainContent -->
+    <main class="flex-1 flex flex-col items-center justify-center min-h-screen pt-16">
+        <!-- @COMPONENT: HeroSection -->
+        <section class="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="space-y-8">
+                <!-- Main Title -->
+                <h1 class="text-6xl sm:text-8xl md:text-9xl lg:text-[12rem] font-black text-foreground leading-none tracking-tight select-none">
+                    Fuck
+                </h1>
+                
+                <!-- Subtitle -->
+                <p class="text-lg sm:text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+                    A simple, bold statement presented with clean, modern design principles.
+                </p>
+                
+                <!-- Action Buttons -->
+                <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mt-12">
+                    <button class="inline-flex items-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-primary-foreground bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ring transition-colors duration-200">
+                        Learn More
+                    </button>
+                    <button class="inline-flex items-center px-8 py-3 border border-border text-base font-medium rounded-md text-foreground bg-background hover:bg-accent focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ring transition-colors duration-200">
+                        Get Started
+                    </button>
+                </div>
+            </div>
+        </section>
+        <!-- @END_COMPONENT: HeroSection -->
+
+        <!-- @COMPONENT: FeatureGrid -->
+        <section class="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mt-24 mb-24">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div class="text-center p-6 rounded-lg border border-border bg-card hover:shadow-lg transition-shadow duration-200">
+                    <div class="w-12 h-12 mx-auto mb-4 bg-primary rounded-lg flex items-center justify-center">
+                        <svg class="w-6 h-6 text-primary-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold text-card-foreground mb-2">Fast</h3>
+                    <p class="text-muted-foreground text-sm">Lightning-fast performance with optimized code and modern techniques.</p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="text-center p-6 rounded-lg border border-border bg-card hover:shadow-lg transition-shadow duration-200">
+                    <div class="w-12 h-12 mx-auto mb-4 bg-primary rounded-lg flex items-center justify-center">
+                        <svg class="w-6 h-6 text-primary-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold text-card-foreground mb-2">Simple</h3>
+                    <p class="text-muted-foreground text-sm">Clean, minimal design that focuses on what matters most.</p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="text-center p-6 rounded-lg border border-border bg-card hover:shadow-lg transition-shadow duration-200">
+                    <div class="w-12 h-12 mx-auto mb-4 bg-primary rounded-lg flex items-center justify-center">
+                        <svg class="w-6 h-6 text-primary-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold text-card-foreground mb-2">Reliable</h3>
+                    <p class="text-muted-foreground text-sm">Cross-browser compatibility and consistent performance.</p>
+                </div>
+            </div>
+        </section>
+        <!-- @END_COMPONENT: FeatureGrid -->
+    </main>
+    <!-- @END_COMPONENT: MainContent -->
+
+    <!-- @COMPONENT: Footer -->
+    <footer class="border-t border-border bg-background">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="col-span-1 md:col-span-2">
+                    <h3 class="text-lg font-semibold text-foreground mb-4">Fuck</h3>
+                    <p class="text-muted-foreground text-sm max-w-md">
+                        A demonstration of clean, modern web design principles with bold typography and minimal aesthetics.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="text-sm font-semibold text-foreground mb-4">Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-muted-foreground hover:text-foreground text-sm transition-colors duration-200">Home</a></li>
+                        <li><a href="#" class="text-muted-foreground hover:text-foreground text-sm transition-colors duration-200">About</a></li>
+                        <li><a href="#" class="text-muted-foreground hover:text-foreground text-sm transition-colors duration-200">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-sm font-semibold text-foreground mb-4">Legal</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-muted-foreground hover:text-foreground text-sm transition-colors duration-200">Privacy</a></li>
+                        <li><a href="#" class="text-muted-foreground hover:text-foreground text-sm transition-colors duration-200">Terms</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-8 pt-8 border-t border-border">
+                <p class="text-center text-muted-foreground text-sm">
+                    © 2024 Fuck. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
+    <!-- @END_COMPONENT: Footer -->
+
+    <script>
+        // TODO: Implement mobile menu toggle functionality
+        // TODO: Implement smooth scrolling for navigation links
+        // TODO: Add any additional interactive features as needed
+        
+        (function() {
+            // Simple responsive text scaling
+            function adjustTitleSize() {
+                const title = document.querySelector('h1');
+                const viewport = window.innerWidth;
+                
+                if (viewport < 640) {
+                    title.className = title.className.replace(/text-\w+/g, 'text-6xl');
+                } else if (viewport < 768) {
+                    title.className = title.className.replace(/text-\w+/g, 'text-8xl');
+                } else if (viewport < 1024) {
+                    title.className = title.className.replace(/text-\w+/g, 'text-9xl');
+                } else {
+                    title.className = title.className.replace(/text-\w+/g, 'text-[12rem]');
+                }
+            }
+            
+            window.addEventListener('resize', adjustTitleSize);
+            adjustTitleSize(); // Initial call
+        })();
+    </script>
+</body>
+</html>

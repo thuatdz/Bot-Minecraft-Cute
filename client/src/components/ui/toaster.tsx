@@ -1,0 +1,44 @@
+
+import React from "react"
+import {
+  Toast,
+  ToastClose,
+  ToastDescription,
+  ToastProvider,
+  ToastTitle,
+  ToastViewport,
+} from "@/components/ui/toast"
+import { useToast } from "@/hooks/use-toast"
+
+export function Toaster() {
+  // Wrap useToast trong try-catch để handle lỗi gracefully
+  let toasts: any[] = [];
+  
+  try {
+    const toastData = useToast();
+    toasts = toastData.toasts || [];
+  } catch (error) {
+    console.warn('Toast hook error:', error);
+    toasts = [];
+  }
+
+  return (
+    <ToastProvider>
+      {toasts.map(function ({ id, title, description, action, ...props }) {
+        return (
+          <Toast key={id} {...props}>
+            <div className="grid gap-1">
+              {title && <ToastTitle>{title}</ToastTitle>}
+              {description && (
+                <ToastDescription>{description}</ToastDescription>
+              )}
+            </div>
+            {action}
+            <ToastClose />
+          </Toast>
+        )
+      })}
+      <ToastViewport />
+    </ToastProvider>
+  )
+}
