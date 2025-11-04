@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import mineflayer, { Bot } from 'mineflayer'
 import { pathfinder, Movements } from 'mineflayer-pathfinder'
 import * as net from 'net'
@@ -20,8 +21,8 @@ const geminiApiKey = process.env.GEMINI_API_KEY // Google Gemini API key
 
 // Bot configuration
 const BOT_CONFIG: BotConfig = {
-  host: process.env.MINECRAFT_SERVER_HOST || 'thuatzai123.aternos.me',
-  port: parseInt(process.env.MINECRAFT_SERVER_PORT || '38893'),
+  host: process.env.MINECRAFT_SERVER_HOST || 'node2.nodenow.eu',
+  port: parseInt(process.env.MINECRAFT_SERVER_PORT || '25696'),
   username: process.env.MINECRAFT_BOT_USERNAME || 'ice',
   version: process.env.MINECRAFT_VERSION || '1.21.2',
   auth: 'offline' as const,
@@ -1686,9 +1687,9 @@ async function createBot() {
   // Alias để tương thích với lệnh chat cũ
   startSmartAutoFishing = function() {
     // Dừng các hoạt động khác TRƯỚC khi bắt đầu câu
-    stopFollowing()
-    stopProtecting()
-    autoFarmActive = false
+  stopFollowing()
+  stopProtecting()
+  if (autoFarmActive) stopAutoFarm()
 
     // Kích hoạt chế độ câu cá thông minh
     autoFishingActive = true
@@ -2301,11 +2302,11 @@ async function createBot() {
       return
     }
 
-    // Dừng các hoạt động khác
-    stopFollowing()
-    stopProtecting()
-    if (autoFishingActive) stopAutoFishing()
-    autoFarmActive = false
+  // Dừng các hoạt động khác
+  stopFollowing()
+  stopProtecting()
+  if (autoFishingActive) stopAutoFishing()
+  if (autoFarmActive) stopAutoFarm()
 
     const lowerType = buildType.toLowerCase()
     let selectedBuild = null
@@ -2750,11 +2751,11 @@ async function createBot() {
       return
     }
 
-    // Dừng các hoạt động khác
-    stopFollowing()
-    stopProtecting()
-    if (autoFishingActive) stopAutoFishing()
-    autoFarmActive = false
+  // Dừng các hoạt động khác
+  stopFollowing()
+  stopProtecting()
+  if (autoFishingActive) stopAutoFishing()
+  if (autoFarmActive) stopAutoFarm()
 
     bot.chat('🌱 Sẽ dọn phẳng khu vực trước khi xây!')
     console.log('🌱 Starting auto build with terrain clearing')
@@ -2879,12 +2880,12 @@ async function createBot() {
       return
     }
 
-    // Stop other activities
-    stopFollowing()
-    stopProtecting()
-    if (autoFishingActive) stopSmartAutoFishing()
-    autoFarmActive = false
-    if (autoMiningActive) stopAutoMining(true)
+  // Stop other activities
+  stopFollowing()
+  stopProtecting()
+  if (autoFishingActive) stopSmartAutoFishing()
+  if (autoFarmActive) stopAutoFarm()
+  if (autoMiningActive) stopAutoMining(true)
 
     autoChestHuntingActive = true
     bot.chat('📦 Bắt đầu auto tìm rương! Tớ sẽ quét trong phạm vi 200 blocks...')
@@ -5219,9 +5220,8 @@ Hãy trả lời câu hỏi này với phong cách:
       isCurrentlyDigging = false
     }
 
-    // Dừng farm silent
-    autoFarmActive = false
-    if (farmInterval) clearInterval(farmInterval)
+  // Dừng farm silent
+  if (autoFarmActive) stopAutoFarm()
 
     // Dừng chest hunting silent
     if (autoChestHuntingActive) {
@@ -5638,10 +5638,21 @@ Hãy trả lời câu hỏi này với phong cách:
 
   stopAutoFarm = function() {
     autoFarmActive = false
-    if (farmInterval) clearInterval(farmInterval)
-    bot.pathfinder.setGoal(null)
-    bot.pvp.stop()
-    bot.setControlState('sprint', false)
+    if (farmInterval) {
+      clearInterval(farmInterval)
+      farmInterval = null
+    }
+
+    // Defensive cleanup: clear pathfinder goal and stop pvp
+    try { bot.pathfinder.setGoal(null) } catch (e) { console.log('Error clearing pathfinder goal in stopAutoFarm:', e) }
+    try { bot.pvp.stop() } catch (e) { console.log('Error stopping pvp in stopAutoFarm:', e) }
+
+    // Reset common control states so the bot can be controlled by other managers
+    const controlsToReset = ['forward','back','left','right','jump','sneak','sprint']
+    for (const c of controlsToReset) {
+      try { bot.setControlState(c as any, false) } catch (e) {}
+    }
+
     console.log('⏹️ Auto Farm All - Deactivated')
   }
 
@@ -5650,8 +5661,8 @@ Hãy trả lời câu hỏi này với phong cách:
     // 1. Dừng các hoạt động khác trước khi bắt đầu mine
     stopFollowing()
     stopProtecting()
-    if (autoFishingActive) stopSmartAutoFishing()
-    autoFarmActive = false
+  if (autoFishingActive) stopSmartAutoFishing()
+  if (autoFarmActive) stopAutoFarm()
 
     autoMiningActive = true
     targetOreType = oreType.toLowerCase()
@@ -6177,44 +6188,56 @@ Hãy trả lời câu hỏi này với phong cách:
     // Get age from block metadata - use different methods
     let cropAge = -1
     try {
-      // Method 1: Try getProperties() if available
-      if (block.getProperties && typeof block.getProperties === 'function') {
+      // Method 1: block.properties?.age (newer mineflayer versions)
+      if (block.properties && typeof block.properties === 'object' && block.properties.age !== undefined) {
+        cropAge = Number(block.properties.age)
+      }
+
+      // Method 2: block.state?.properties?.age
+      if (cropAge === -1 && block.state && block.state.properties && block.state.properties.age !== undefined) {
+        cropAge = Number(block.state.properties.age)
+      }
+
+      // Method 3: getProperties() helper
+      if (cropAge === -1 && block.getProperties && typeof block.getProperties === 'function') {
         const props = block.getProperties()
-        if (props && props.age !== undefined) {
-          cropAge = props.age
-        }
+        if (props && props.age !== undefined) cropAge = Number(props.age)
       }
 
-      // Method 2: Try direct metadata access
+      // Method 4: metadata (older versions)
       if (cropAge === -1 && block.metadata !== undefined) {
-        cropAge = block.metadata
+        cropAge = Number(block.metadata)
       }
 
-      // Method 3: Check block state
+      // Method 5: fallback to stateId lower bits (best-effort)
       if (cropAge === -1 && block.stateId !== undefined) {
-        // For wheat/carrots/potatoes: stateId represents age directly in many cases
-        // This is a simplified check - stateId contains encoded block data
-        cropAge = block.stateId % 8 // Age is typically stored in lower 3 bits
+        cropAge = Number(block.stateId % 8)
       }
     } catch (error) {
       console.log('⚠️ Lỗi lấy crop age:', error)
-      return false
+      cropAge = -1
     }
 
-    console.log(`🌾 Checking crop: ${blockName}, age: ${cropAge}`)
+    // Debugging helper: print only when cropAge is unknown or > threshold
+    if (cropAge === -1) {
+      console.log(`🌾 Checking crop: ${blockName}, age: unknown (-1) - will treat as not mature`)
+    } else {
+      console.log(`🌾 Checking crop: ${blockName}, age: ${cropAge}`)
+    }
 
+    // Normalize checks for both singular/plural block names
     // Wheat, carrots, potatoes need age 7
-    if (blockName.includes('wheat') || blockName.includes('carrots') || blockName.includes('potatoes')) {
+    if (blockName.includes('wheat') || blockName.includes('carrot') || blockName.includes('potato')) {
       return cropAge === 7
     }
 
     // Beetroot needs age 3
-    if (blockName.includes('beetroots')) {
+    if (blockName.includes('beetroot')) {
       return cropAge === 3
     }
 
     // Nether wart needs age 3
-    if (blockName.includes('nether_wart')) {
+    if (blockName.includes('nether_wart') || blockName.includes('netherwart')) {
       return cropAge === 3
     }
 
@@ -6308,6 +6331,22 @@ Hãy trả lời câu hỏi này với phong cách:
 
     if (anyCrop) {
       console.log(`✅ Tìm thấy cây trồng: ${anyCrop.name} tại (${anyCrop.position.x}, ${anyCrop.position.y}, ${anyCrop.position.z})`)
+      try {
+        const inspected = bot.blockAt(anyCrop.position)
+        if (inspected) {
+          console.log('🔎 DEBUG anyCrop blockAt:', {
+            name: inspected.name,
+            metadata: inspected.metadata,
+            stateId: inspected.stateId,
+            properties: inspected.properties || null,
+            state: inspected.state || null
+          })
+        } else {
+          console.log('🔎 DEBUG anyCrop blockAt returned null')
+        }
+      } catch (e) {
+        console.log('🔎 DEBUG error inspecting anyCrop:', e?.message || e)
+      }
     } else {
       console.log('❌ KHÔNG tìm thấy bất kỳ cây trồng nào trong 32 blocks!')
     }
@@ -6361,7 +6400,9 @@ Hãy trả lời câu hỏi này với phong cách:
 
           return // Process one crop per cycle
         } catch (error) {
-          console.log('❌ Lỗi thu hoạch:', error)
+          console.log('❌ Lỗi thu hoạch:', error?.message || error)
+          if (error && error.stack) console.log(error.stack)
+          try { bot.pathfinder.setGoal(null) } catch (e) {}
         }
       } else {
         console.log('⏭️ Cây này đã thu hoạch rồi, tìm cây khác...')
@@ -6426,7 +6467,9 @@ Hãy trả lời câu hỏi này với phong cách:
           await equipBestHoe()
           return
         } catch (error) {
-          console.log('❌ Lỗi trồng cây:', error)
+          console.log('❌ Lỗi trồng cây:', error?.message || error)
+          if (error && error.stack) console.log(error.stack)
+          try { bot.pathfinder.setGoal(null) } catch (e) {}
         }
       } else {
         console.log('❌ Không tìm thấy hạt giống để trồng')
@@ -6468,7 +6511,8 @@ Hãy trả lời câu hỏi này với phong cách:
               console.log(`📦 Đã cất ${item.name} x${item.count}`)
               await new Promise(resolve => setTimeout(resolve, 100))
             } catch (error) {
-              console.log('❌ Lỗi cất đồ:', error)
+              console.log('❌ Lỗi cất đồ:', error?.message || error)
+              if (error && error.stack) console.log(error.stack)
             }
           }
 
@@ -6956,7 +7000,7 @@ Hãy trả lời câu hỏi này với phong cách:
     // Graceful cleanup - catch any errors
     try {
       // Clear all activities when disconnected
-      autoFarmActive = false
+  if (autoFarmActive) stopAutoFarm()
       autoFishingActive = false
       if (typeof autoMiningActive !== 'undefined') {
         autoMiningActive = false
